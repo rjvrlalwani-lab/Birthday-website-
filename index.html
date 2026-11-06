@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Avi! 🕷️🕸️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #141c2e 0%, #080c14 100%);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cinematic Background Glows */
+        .ambient-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .glow-red { background: rgba(230, 36, 41, 0.22); top: -80px; left: -80px; }
+        .glow-blue { background: rgba(21, 101, 192, 0.22); bottom: -80px; right: -80px; }
+
+        /* Subtle Web Background Overlay */
+        .web-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .screen {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            padding: 25px;
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: cinematicFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes cinematicFade {
+            from { opacity: 0; transform: translateY(12px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ================= PHASE 1: CAKE & CANDLES ================= */
+        .mission-badge {
+            background: linear-gradient(135deg, #e62429, #b71c1c);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 25px rgba(230, 36, 41, 0.4);
+            margin-bottom: 15px;
+        }
+
+        .phase1-title {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .cake-container {
+            position: relative;
+            width: 280px;
+            height: 270px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .candles-row {
+            display: flex;
+            justify-content: space-around;
+            width: 175px;
+            margin-bottom: -4px;
+            z-index: 5;
+        }
+
+        .candle {
+            position: relative;
+            width: 16px;
+            height: 55px;
+            background: linear-gradient(90deg, #e62429 50%, #1565c0 50%);
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            cursor: pointer;
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 7px;
+            background: #fff;
+        }
+
+        .flame-hitbox {
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .flame {
+            width: 16px;
+            height: 28px;
+            background: radial-gradient(ellipse at bottom, #ffffff 15%, #ffeaa7 45%, #ff9800 75%, #e62429 100%);
+            border-radius: 50% 50% 35% 35%;
+            box-shadow: 0 0 15px #ff9800, 0 0 25px #e62429;
+            animation: flicker 0.16s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .flame.out {
+            opacity: 0;
+            transform: scale(0) translateY(-15px);
+            pointer-events: none;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .smoke.puff {
+            animation: smokeUp 0.8s ease-out forwards;
+        }
+
+        @keyframes smokeUp {
+            0% { opacity: 0.9; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -35px) scale(3); }
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); }
+            100% { transform: scale(1.08, 0.95) rotate(2deg); }
+        }
+
+        .cake-top {
+            width: 200px;
+            height: 65px;
+            background: linear-gradient(135deg, #e62429, #b71c1c);
+            border-radius: 12px 12px 0 0;
+            box-shadow: inset 0 -6px 0 rgba(0,0,0,0.25), 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .cake-mask-eye {
+            width: 32px;
+            height: 16px;
+            background: #ffffff;
+            border: 3px solid #080c14;
+            border-radius: 0 100% 0 100%;
+        }
+        .cake-mask-eye.left { transform: rotate(15deg); }
+        .cake-mask-eye.right { transform: scaleX(-1) rotate(15deg); }
+
+        .cake-bottom {
+            width: 250px;
+            height: 80px;
+            background: linear-gradient(135deg, #1565c0, #0d47a1);
+            border-radius: 10px 10px 6px 6px;
+            box-shadow: inset 0 -8px 0 rgba(0,0,0,0.3), 0 8px 20px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .cake-plate {
+            width: 280px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        /* ================= PHASE 2: REALISTIC HERO DISPLAY ================= */
+        .main-bday-heading {
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 30%, #e62429 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 15px rgba(230, 36, 41, 0.3));
+            animation: floatHeading 3s ease-in-out infinite;
+        }
+
+        .sub-heading {
+            font-size: 1.05rem;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        @keyframes floatHeading {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .showcase-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin: 10px 0 35px;
+            width: 100%;
+        }
+
+        /* Glassmorphism Cards */
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 20px;
+            width: 175px;
+            height: 205px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: floatCard 4s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .showcase-card.bmw-card {
+            width: 220px;
+            animation-delay: 0.5s;
+            border-color: rgba(21, 101, 192, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(21, 101, 192, 0.2);
+        }
+
+        .showcase-card.spidey-head-card {
+            border-color: rgba(230, 36, 41, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(230, 36, 41, 0.2);
+            animation-delay: 1s;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+        }
+
+        .action-btn {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ffffff;
+            background: linear-gradient(135deg, #e62429 0%, #b71c1c 100%);
+            border: none;
+            padding: 16px 38px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(230, 36, 41, 0.45);
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 15px 30px rgba(230, 36, 41, 0.65);
+        }
+
+        /* ================= PHASE 3: SQUARE MESSAGE CARD ================= */
+        .square-message-box {
+            width: 92vw;
+            max-width: 440px;
+            min-height: 440px;
+            background: rgba(13, 19, 33, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(230, 36, 41, 0.25);
+            padding: 38px 32px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            animation: popCard 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popCard {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .msg-heading {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            margin-bottom: 18px;
+            width: 100%;
+        }
+
+        .msg-body {
+            font-size: 1.02rem;
+            line-height: 1.75;
+            color: #e2e8f0;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        @media (max-width: 500px) {
+            .square-message-box {
+                min-height: 390px;
+                padding: 28px 22px;
+            }
+            .msg-body {
+                font-size: 0.96rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cinematic Lighting & Web Overlay -->
+    <div class="ambient-glow glow-red"></div>
+    <div class="ambient-glow glow-blue"></div>
+    <div class="web-overlay"></div>
+
+    <!-- ==================== PHASE 1: CAKE & CANDLES ==================== -->
+    <div id="phase1" class="screen active">
+        <div class="mission-badge">Mission: Candles (<span id="candle-counter">0</span> / 4)</div>
+        <h2 class="phase1-title">Make a wish & flames par click karo! 🔥</h2>
+
+        <div class="cake-container">
+            <div class="candles-row">
+                <!-- Candle 1 -->
+                <div class="candle" onclick="blowCandle(0)">
+                    <div class="flame-hitbox">
+                        <div class="flame" id="flame-0"></div>
+                        <div class="smoke" id="smoke-0"></div>
+                    </div>
+                </div>
+                <!-- Candle 2 -->
+                <div class="candle" onclick="blowCandle(1)">
+                    <div class="flame-hitbox">
+                        <div class="flame" id="flame-1"></div>
+                        <div class="smoke" id="smoke-1"></div>
+                    </div>
+                </div>
+                <!-- Candle 3 -->
+                <div class="candle" onclick="blowCandle(2)">
+                    <div class="flame-hitbox">
+                        <div class="flame" id="flame-2"></div>
+                        <div class="smoke" id="smoke-2"></div>
+                    </div>
+                </div>
+                <!-- Candle 4 -->
+                <div class="candle" onclick="blowCandle(3)">
+                    <div class="flame-hitbox">
+                        <div class="flame" id="flame-3"></div>
+                        <div class="smoke" id="smoke-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cake-top">
+                <div class="cake-mask-eye left"></div>
+                <div class="cake-mask-eye right"></div>
+            </div>
+            <div class="cake-bottom"></div>
+            <div class="cake-plate"></div>
+        </div>
+    </div>
+
+    <!-- ==================== PHASE 2: HERO, SPIDER-MAN HEAD & BMW ==================== -->
+    <div id="phase2" class="screen">
+        <h1 class="main-bday-heading">Happy Birthday Avi! ⚡</h1>
+        <p class="sub-heading">Arvind Rajput — Your Friendly Neighborhood Legend</p>
+
+        <div class="showcase-grid">
+            <!-- 1. Realistic Spider-Man Head (Replaced One Monster Can) -->
+            <div class="showcase-card spidey-head-card">
+                <svg width="75" height="95" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Head Base with Gradient Shading -->
+                    <defs>
+                        <radialGradient id="maskGrad" cx="40%" cy="40%" r="60%">
+                            <stop offset="0%" stop-color="#ff4d4d"/>
+                            <stop offset="100%" stop-color="#b71c1c"/>
+                        </radialGradient>
+                    </defs>
+                    <ellipse cx="50" cy="62" rx="42" ry="48" fill="url(#maskGrad)" stroke="#080c14" stroke-width="3"/>
+                    
+                    <!-- Web Lines on Mask -->
+                    <path d="M50 14 L50 110" stroke="#080c14" stroke-width="1.2" opacity="0.6"/>
+                    <path d="M8 62 L92 62" stroke="#080c14" stroke-width="1.2" opacity="0.6"/>
+                    <path d="M20 28 L80 96" stroke="#080c14" stroke-width="1" opacity="0.5"/>
+                    <path d="M80 28 L20 96" stroke="#080c14" stroke-width="1" opacity="0.5"/>
+                    <path d="M50 14 Q30 35 8 50" fill="none" stroke="#080c14" stroke-width="1" opacity="0.6"/>
+                    <path d="M50 14 Q70 35 92 50" fill="none" stroke="#080c14" stroke-width="1" opacity="0.6"/>
+                    <path d="M50 35 Q35 48 18 62" fill="none" stroke="#080c14" stroke-width="1" opacity="0.6"/>
+                    <path d="M50 35 Q65 48 82 62" fill="none" stroke="#080c14" stroke-width="1" opacity="0.6"/>
+
+                    <!-- Glossy Spidey Eyes -->
+                    <path d="M19 54 Q33 38 48 60 Q32 68 19 54 Z" fill="#ffffff" stroke="#080c14" stroke-width="3"/>
+                    <path d="M81 54 Q67 38 52 60 Q68 68 81 54 Z" fill="#ffffff" stroke="#080c14" stroke-width="3"/>
+                    <!-- Eye Highlights -->
+                    <path d="M25 50 Q33 42 40 52" fill="none" stroke="#e0f2fe" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M75 50 Q67 42 60 52" fill="none" stroke="#e0f2fe" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="card-label" style="color: #ff6b6b;">Spidey Mask 🕷️</span>
+            </div>
+
+            <!-- 2. BMW Car -->
+            <div class="showcase-card bmw-card">
+                <svg width="180" height="110" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M45 55 L75 25 L145 25 L175 55 L200 68 L200 105 L20 105 L20 68 Z" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+                    <path d="M55 53 L80 30 L140 30 L165 53 Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1.5"/>
+                    <circle cx="110" cy="63" r="6.5" fill="#fff" stroke="#111" stroke-width="1.5"/>
+                    <path d="M110 56.5 A6.5 6.5 0 0 1 116.5 63 L110 63 Z" fill="#2563eb"/>
+                    <path d="M110 69.5 A6.5 6.5 0 0 1 103.5 63 L110 63 Z" fill="#2563eb"/>
+                    <rect x="83" y="74" width="24" height="17" rx="4" fill="#020617" stroke="#3b82f6" stroke-width="2"/>
+                    <rect x="113" y="74" width="24" height="17" rx="4" fill="#020617" stroke="#3b82f6" stroke-width="2"/>
+                    <rect x="28" y="102" width="30" height="12" rx="4" fill="#020617"/>
+                    <rect x="162" y="102" width="30" height="12" rx="4" fill="#020617"/>
+                </svg>
+                <span class="card-label" style="color: #60a5fa;">BMW M-Series 🏎️</span>
+            </div>
+
+            <!-- 3. Monster Energy Can -->
+            <div class="showcase-card">
+                <svg width="65" height="115" viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="12" y="10" width="56" height="120" rx="10" fill="#0d1117" stroke="#22c55e" stroke-width="2"/>
+                    <ellipse cx="40" cy="12" rx="26" ry="5" fill="#94a3b8"/>
+                    <ellipse cx="40" cy="128" rx="26" ry="5" fill="#94a3b8"/>
+                    <path d="M27 34 C25 55, 30 75, 28 96" stroke="#22c55e" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M40 30 C38 55, 43 75, 40 100" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+                    <path d="M53 36 C51 55, 55 75, 52 94" stroke="#22c55e" stroke-width="5" stroke-linecap="round"/>
+                    <text x="40" y="116" fill="#ffffff" font-family="Montserrat" font-size="7.5" font-weight="800" text-anchor="middle" letter-spacing="1">MONSTER</text>
+                </svg>
+                <span class="card-label" style="color: #22c55e;">Energy Boost ⚡</span>
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="openPhase3()">Open Special Note 💌</button>
+    </div>
+
+    <!-- ==================== PHASE 3: SQUARE MESSAGE BOX ==================== -->
+    <div id="phase3" class="screen">
+        <div class="square-message-box">
+            <div class="msg-heading">Happy Birthday, Aviii! ❤️</div>
+            <p class="msg-body">
+                Thank you for always being so caring, thoughtful and for putting so much effort into the little things. Teri chhoti-chhoti efforts, chocolate cravings fulfil karna aur bina bole meri care karna, it all means so much to me. I might not express it every time, but I genuinely appreciate you. I hope you always stay happy and get everything you deserve. Never change, keep being you! Lots of loveee! 🥹🫶🏻
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let blownCandles = [false, false, false, false];
+        let totalBlown = 0;
+
+        function blowCandle(index) {
+            if (blownCandles[index]) return;
+
+            blownCandles[index] = true;
+            totalBlown++;
+
+            document.getElementById('flame-' + index).classList.add('out');
+            document.getElementById('smoke-' + index).classList.add('puff');
+            document.getElementById('candle-counter').innerText = totalBlown;
+
+            if (totalBlown === 4) {
+                setTimeout(() => {
+                    triggerConfetti();
+                    document.getElementById('phase1').classList.remove('active');
+                    document.getElementById('phase2').classList.add('active');
+                }, 650);
+            }
+        }
+
+        function openPhase3() {
+            triggerConfetti();
+            document.getElementById('phase2').classList.remove('active');
+            document.getElementById('phase3').classList.add('active');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#e62429', '#3b82f6', '#22c55e', '#ffffff']
+                });
+            }
+        }
+    </script>
+</body>
+</html>
